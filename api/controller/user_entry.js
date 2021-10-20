@@ -3,7 +3,9 @@ const user_db = require("../model/users");
 
 exports.post_user_entry = (req, res, next) => {
 
-  console.log( req )
+  let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress || req.socket.remoteAddress;
+
+  console.log( ip )
 
 
   let valus = {
