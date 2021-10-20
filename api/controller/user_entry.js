@@ -1,35 +1,33 @@
 const user_db = require("../model/users");
-
+var request = require('request');
 
 exports.post_user_entry = (req, res, next) => {
 
   let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress || req.socket.remoteAddress;
+  let iptype = (ip.indexOf(".") === -1) ? 0 : 1
+  let url = (ip !== "::1") ? 'http://ipinfo.io/' + req.ip : 'http://ipinfo.io/';
 
-  console.log( ip )
-
-
-  let valus = {
-    adhar : "1223435454566",
-    ipid  : "21223.2121.21212.212",
-    iptype : '1',
-    state : "beher",
-  }
-  user_db.create( valus, (err,data)=>{
-
-    if (err){
-      res.status(500).json({
-        err
-      });
+  request.get(url, function (err, response, body) {
+    body = JSON.parse(body) 
+    let valus = {
+      adhar: req.body.adhar,
+      ipid: ip,
+      iptype: iptype,
+      state: body.region,
     }
-    res.status(200).json({
-      data,
-      ip
-    });
 
-  } )
+    if (!err && response.statusCode == 200) {
 
-
-
-
-
+      user_db.create(valus, (err, data) => {
+        if (err) {
+          res.status(500).json({
+            err
+          });
+        }
+        res.status(200).json({
+          data
+        });
+      })
+    }
+  })
 };
