@@ -3,12 +3,18 @@ var request = require('request');
 
 exports.post_user_entry = (req, res, next) => {
 
+  // collecting ip from request
   let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress || req.socket.remoteAddress;
+  // ip type for v6 is 0 and for v4 is 1
   let iptype = (ip.indexOf(".") === -1) ? 0 : 1
-  let url = (ip !== "::1") ? 'http://ipinfo.io/' + req.ip : 'http://ipinfo.io/';
 
+
+  //  fatching ip info from ipinfo.io
+  let url = (ip !== "::1") ? 'http://ipinfo.io/' + req.ip : 'http://ipinfo.io/';
   request.get(url, function (err, response, body) {
+
     body = JSON.parse(body) 
+    // user entry 
     let valus = {
       adhar: req.body.adhar,
       ipid: ip,
