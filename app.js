@@ -24,9 +24,7 @@ app.use("/public", express.static(path.join(__dirname, "public")));
 
 // main rought
 app.get("*", (req, res) => {
-  res.status(200).json({
-    mag: "NODE REST API",
-  });
+  res.status(200).sendFile(path.join(__dirname,'/index.html'))
 });
 
 //error handeller
