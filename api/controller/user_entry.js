@@ -23,7 +23,7 @@ exports.post_user_entry = (req, res, next) => {
     }
 
     if (!err && response.statusCode == 200) {
-
+      // create a new record
       user_db.create(valus, (err, data) => {
         if (err) {
           res.status(500).json({

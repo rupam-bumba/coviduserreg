@@ -11,8 +11,8 @@ const Users = function (customer) {
 
 };
 
-//  INSERT INTO `users` (`id`, `adhar`, `ipid`, `iptype`, `state`, `date`) VALUES (NULL, '1234567890876', '123.345.2.34', '1', 'asam', CURRENT_TIMESTAMP);
 
+// create a new record model
 Users.create = (newCustomer, result) => {
 
   let que = "INSERT INTO `users` (`id`, `adhar`, `ipid`, `iptype`, `state`, `date`)" + `VALUES (NULL, '${newCustomer.adhar}', '${newCustomer.ipid}', '${newCustomer.iptype}', '${newCustomer.state}', CURRENT_TIMESTAMP)`
@@ -29,7 +29,7 @@ Users.create = (newCustomer, result) => {
   });
 };
 
-
+// get all info of  users
 Users.getAll = (result) => {
   sql.query("SELECT * FROM users", (err, res) => {
     if (err) {
@@ -44,15 +44,16 @@ Users.getAll = (result) => {
 };
 
 
-
+// get report of vacination
 Users.report = (parameters,result) => {
 
-  
+
+  // we have segregated main query in some part
   let groupby 
   let where = `WHERE date BETWEEN '${parameters.startdate} 00:00:00' AND '${parameters.enddate} 23:59:00' AND state = '${parameters.state}'`
   let select 
 
-
+  // for deferent values of group we choose deferent query string
   switch (parameters.grouped) {
     case "yearly":
       groupby = "GROUP BY YEAR(date)"
